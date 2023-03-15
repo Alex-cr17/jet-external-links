@@ -1,0 +1,43 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.row .col-1-of-8 {
+  width: calc(12.5% - 10px); /* Subtracting 10px for margin */
+  margin-bottom: 20px;
+}
+
+.row .item a {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.row .item img {
+  height: 100px; /* Or any other fixed value */
+  width: 100px;
+  margin-bottom: 10px;
+}
+
+.row .item span {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.2;
+  color: #333;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+}
