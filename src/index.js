@@ -10,7 +10,6 @@ class JetTestReact extends HTMLElement {
   }
 
   createElement(params) {
-    console.log(params.app_name, params.app_name)
     return React.createElement(App, { ...params, dispatchEvent: this.dispatchEvent.bind(this) }, React.createElement('slot'));
   }
 
@@ -27,13 +26,6 @@ class JetTestReact extends HTMLElement {
 
   disconnectedCallback() {
     ReactDOM.unmountComponentAtNode(this);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    console.log(name, oldValue, newValue)
-  //   if (name === 'app_name' || name === 'api_token' || name === 'database_name' || name === 'column_title' || name === 'column_icon' || name === 'column_link') {
-  //     ReactDOM.render(this.createElement(newValue), this);
-  //   }
   }
 }
 
