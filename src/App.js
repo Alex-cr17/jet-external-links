@@ -14,7 +14,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <ExternalLinksComponent api_token={this.props.api_token} api_url={this.props.api_url} />
+        <ExternalLinksComponent {...this.props} />
       </div>
     );
   }
