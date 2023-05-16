@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { getPublicApiService } from 'jet-admin-sdk';
 
 const getUnionTags = (data) => {
   let mergedTags = [];
@@ -23,27 +22,25 @@ const ExternalLinksComponent = (props) => {
   const [tags, setTags] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
 
-  useEffect(() => {
+  const fetchData = (page) => {
     if (api_token && api_url) {
-
-      fetch(`https://data.jetadmin.io${api_url}`, {
+      fetch(`https://data.jetadmin.io${api_url}?page=${page}`, {
         headers: {
           'Authorization': `Bearer ${api_token}`,
           'Content-Type': 'application/json'
         }
       })
         .then(response => response.json())
-        .then(data => {
-          setData(data.results);
-          const unionTags = getUnionTags(data.results)
-          if (unionTags.length) {
-            setTags(getUnionTags(data.results))
-            setActiveTag(unionTags[0])
-            setFilteredData(data.results.filter(link => (Array.isArray(link.tags) && link.tags.includes(unionTags[0]))))
+        .then(responseData => {
+          setData(prevData => {
+            return [...prevData, ...responseData.results]
+          });
+          if (responseData.next) {
+            fetchData(page + 1)
           } else {
-            setFilteredData(data.results)
+            setLoaded(true);
+
           }
-          setLoaded(true);
         })
         .catch(error => {
           console.error(error)
@@ -51,6 +48,24 @@ const ExternalLinksComponent = (props) => {
           setLoaded(true);
         });
     }
+  }
+
+  useEffect(() => {
+    if (data.length > 0) {
+
+      const unionTags = getUnionTags(data)
+      if (unionTags.length) {
+        setTags(getUnionTags(data))
+        setActiveTag(unionTags[0])
+        setFilteredData(data.filter(link => (Array.isArray(link.tags) && link.tags.includes(unionTags[0]))))
+      } else {
+        setFilteredData(data)
+      }
+    }
+  }, [data]);
+
+  useEffect(() => {
+    fetchData(1)
   }, [api_token, api_url])
 
   const handleActiveTag = (activeTag)  => {
